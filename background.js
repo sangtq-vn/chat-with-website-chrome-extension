@@ -4,7 +4,7 @@ let chatHistory;
 // Listen for when the extension is installed
 chrome.runtime.onInstalled.addListener(function () {
     // Set default API model
-    let defaultModel = "gpt-3.5-turbo-1106";
+    let defaultModel = "Llama2";
     chrome.storage.local.set({ apiModel: defaultModel });
 
     // Set empty chat history
@@ -88,11 +88,13 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 // Fetch data from the OpenAI Chat Completion API
 async function fetchChatCompletion(messages, apiKey, apiModel) {
     try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        const response = await fetch('http://127.0.0.1:8081/v1/chat/completions', {
             method: 'POST',
+            mode: 'cors',          
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Authorization': `Bearer ${apiKey}`,
+                'Access-Control-Allow-Origin':'chrome-extension://hjbggnfogfhlggdkieffojinjmabpcgn'
             },
             body: JSON.stringify({
                 "messages": messages,

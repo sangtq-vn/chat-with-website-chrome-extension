@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
     const clearChatBtn = document.getElementById('clear-chat-btn');
+    const captureBtn = document.getElementById('capture-btn');
 
     let isImageGenerationActive = false;
 
@@ -99,6 +100,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to send user's input to the background script and display it in the chat
     function sendMessage(userMessage) {
         const message = { userInput: userMessage };
+        chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT},
+            function(tabs){
+                 alert(tabs[0].url);
+            }
+        );
+            
         // Send the user's message to the background script
         chrome.runtime.sendMessage(message);
 

@@ -246,6 +246,26 @@ a {
     cursor: not-allowed;
 }
 
+#capture-btn {
+    color: white;
+    padding: 10px;
+    background-color: #444654;
+    border-radius: 12px;
+    border: 1px solid #444654;
+    cursor: pointer;
+    margin-left: auto;
+    width: 38px;
+}
+
+#capture-btn:hover {
+    background-color: #343541;
+}
+
+#capture-btn:disabled {
+    background-color: #343541;
+    cursor: not-allowed;
+}
+
 .code-block {
     background-color: #343541;
     color: white;

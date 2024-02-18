@@ -9,11 +9,14 @@
         "128": "assets/icons/icon-128.png"
     },
     "host_permissions": [
-        "https://api.openai.com/v1/completions"
+        "https://api.openai.com/v1/completions",
+        "http://127.0.0.1:8081/"
     ],
     "permissions": [
         "storage",
-        "downloads"
+        "downloads",
+        "tabs",
+        "activeTab"
     ],
     "background": {
         "service_worker": "background.js"
