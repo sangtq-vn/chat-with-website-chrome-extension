@@ -75,6 +75,50 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // generate RAG content of current tabs 
+    captureBtn.addEventListener('click', function () {
+        // Display a confirmation popup
+        const isConfirmed = window.confirm('Are you sure you want to load new website content and start new chat?');
+
+        // If the user confirms, call api to regenerate dataset and clear the chat history
+        if (isConfirmed) {
+            //disable capture button 
+            captureBtn.disabled = true;
+            // remove the icon from the capture button and add the loading indicator
+            captureBtn.innerHTML = '<i class="fa fa-spinner fa-pulse"></i>';
+            // disable the send button
+            sendBtn.disabled = true;
+            // remove the icon from the send button and add the loading indicator
+            sendBtn.innerHTML = '<i class="fa fa-spinner fa-pulse"></i>';
+
+            chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT},
+            async function(tabs){
+                //alert(tabs[0].url);
+                const response = await fetch('http://127.0.0.1:8081/v1/gen_dataset', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "url": tabs[0].url
+                    })
+                });
+                
+                // restore the icon from capture buttons
+                captureBtn.innerHTML = '<i class="fa fa-camera"></i>';
+                // restore the icon from send buttons
+                sendBtn.innerHTML = '<i class="fa fa-paper-plane"></i>';
+            });
+            chrome.storage.local.set({ chatHistory: [] }, function () {
+                console.log('Chat history cleared');
+                chatMessages.innerHTML = '';
+                sendBtn.disabled = true;
+                checkClearChatBtn();
+            });
+        }
+        
+    });    
+
     // Listen for messages from the background script
     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         if (message.answer) {
@@ -102,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const message = { userInput: userMessage };
         chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT},
             function(tabs){
-                 alert(tabs[0].url);
+                //alert(tabs[0].url);
             }
         );
             

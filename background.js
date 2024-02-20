@@ -10,8 +10,8 @@ chrome.runtime.onInstalled.addListener(function () {
     // Set empty chat history
     chrome.storage.local.set({ chatHistory: [] });
 
-    // Open the options page
-    chrome.runtime.openOptionsPage();
+    // Open the options page - hide
+    //chrome.runtime.openOptionsPage();
 });
 
 // Listen for messages from the popup script
@@ -90,11 +90,9 @@ async function fetchChatCompletion(messages, apiKey, apiModel) {
     try {
         const response = await fetch('http://127.0.0.1:8081/v1/chat/completions', {
             method: 'POST',
-            mode: 'cors',          
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`,
-                'Access-Control-Allow-Origin':'chrome-extension://hjbggnfogfhlggdkieffojinjmabpcgn'
+                'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
                 "messages": messages,
@@ -110,7 +108,6 @@ async function fetchChatCompletion(messages, apiKey, apiModel) {
                 throw new Error(`Failed to fetch. Status code: ${response.status}`);
             }
         }
-
         return await response.json();
     } catch (error) {
         // Send a response to the popup script
